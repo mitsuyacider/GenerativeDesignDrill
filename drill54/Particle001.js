@@ -1,15 +1,18 @@
 export default class Particle001 {
   constructor(pos, mass) {
-    this.topSpeed = random(3, 8);
-    this.velocity = createVector(0, 0);
-    this.acceleratation = p5.Vector.random2D();
+    // this.topSpeed = random(3, 8);
+    this.topSpeed = 4;
+    this.velocity = createVector(0, 5);
+    this.acceleratation = createVector(0, 0.1);
     this.acceleratation.mult(random(0));
 
     this.pos = pos;
     this.fill;
+    this.liquidFill;
     this.stroke;
     this.size = random(50, 100);
     this.gradient;
+
     this.mass = mass;
   }
 
@@ -45,7 +48,8 @@ export default class Particle001 {
     // stroke(this.fill);
     // drawingContext.shadowBlur = 5;
     if (this.fill) {
-      fill(color(this.fill));
+      // fill(color(this.fill));
+      fill(0, 255, 0);
     } else {
       fill(255, 0, 0);
     }
@@ -61,6 +65,12 @@ export default class Particle001 {
       this.pos.y + this.size
     );
     drawingContext.fillStyle = gradient;
+
+    if (this.liquidFill) {
+      // console.log("hallo", this.liquidFill);
+      fill(255, 0, 0);
+    }
+
     // Add three color stops
     const c = this.hexToRgb(this.fill);
     if (c) {
@@ -86,6 +96,31 @@ export default class Particle001 {
     pop();
   }
 
+  isInside(liquid) {
+    const isIn =
+      liquid.x < this.pos.x &&
+      liquid.x + liquid.w > this.pos.x &&
+      liquid.y < this.pos.y &&
+      liquid.y + liquid.h > this.pos.y;
+
+    return isIn;
+  }
+
+  // NOTE: Fd=−12ρv2ACdv∧
+  // https://natureofcode.com/book/chapter-2-forces/
+  drag(liquid) {
+    const c = liquid.c;
+    const dragVec = this.velocity.copy();
+    const speed = dragVec.mag();
+    const dragMag = c * speed * speed;
+    dragVec.mult(-1);
+    dragVec.normalize();
+    dragVec.mult(dragMag);
+    // console.log(dragMag);
+    // dragVec.limit(0.05);
+    this.applyForce(dragVec);
+  }
+
   checkEdge() {
     if (this.pos.x > width) {
       this.velocity.x *= -1;
@@ -104,7 +139,7 @@ export default class Particle001 {
 
     if (this.pos.y < 0) {
       this.velocity.y *= -1;
-      // this.pos.y = 0;
+      // this.pos.y = 1;
     }
   }
 }

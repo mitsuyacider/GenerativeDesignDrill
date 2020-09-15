@@ -1,5 +1,5 @@
-export default class Particle001 {
-  constructor(pos, mass) {
+export default class Particle003 {
+  constructor(pos, mass = 1) {
     this.topSpeed = random(3, 8);
     this.velocity = createVector(0, 0);
     this.acceleratation = p5.Vector.random2D();
@@ -8,17 +8,23 @@ export default class Particle001 {
     this.pos = pos;
     this.fill;
     this.stroke;
-    this.size = random(50, 100);
+    this.size = 0;
+    this.maxSize = random(5, 10);
     this.gradient;
+    this.friction;
     this.mass = mass;
   }
 
   update() {
     // this.acceleratation = p5.Vector.random2D();
     // this.acceleratation.mult(random());
-    this.velocity.add(this.acceleratation);
-    this.velocity.limit(this.topSpeed);
-    this.pos.add(this.velocity);
+    if (this.size < this.maxSize) {
+      this.size += 0.1;
+    } else {
+      this.velocity.add(this.acceleratation);
+      this.velocity.limit(this.topSpeed);
+      this.pos.add(this.velocity);
+    }
 
     this.acceleratation.mult(0);
   }
@@ -43,7 +49,11 @@ export default class Particle001 {
     push();
     noStroke();
     // stroke(this.fill);
+    // strokeWeight(1);
+    // noFill();
+    // drawingContext.shadowColor = color(255, 0, 0);
     // drawingContext.shadowBlur = 5;
+
     if (this.fill) {
       fill(color(this.fill));
     } else {
@@ -51,39 +61,12 @@ export default class Particle001 {
     }
 
     const vec = p5.Vector.sub(this.pos, createVector(width / 2, height / 2));
-    const len = vec.mag();
-
-    const xx = Math.floor(cos(90) * this.pos.x);
-    const gradient = drawingContext.createLinearGradient(
-      xx,
-      this.pos.y,
-      this.pos.x + this.size,
-      this.pos.y + this.size
-    );
-    drawingContext.fillStyle = gradient;
-    // Add three color stops
-    const c = this.hexToRgb(this.fill);
-    if (c) {
-      // const g = this.hexToRgb(this.gradient);
-      gradient.addColorStop(0, `rgb(${c.r}, ${c.g}, ${c.b})`);
-      gradient.addColorStop(0.5, "rgba(255, 255, 255, 100)");
-      gradient.addColorStop(1, `rgb(${c.r}, ${c.g}, ${c.b})`);
-    }
-
-    // Set the fill style and draw a rectangle
-    // translate(width / 2, height / 2);
-    // translate(width / 2, height / 2);
-    const rad = atan2(this.pos.y - height / 2, this.pos.x - width / 2);
-    // rotate(rad);
-    // stroke("green");
-    strokeJoin(ROUND);
-    // rect(0, 0, len, 5);
-    // line(width / 2, height / 2, this.pos.x, this.pos.y);
-    // drawingContext.shadowColor = color(255, 0, 0);
-    // drawingContext.shadowBlur = 25;
-
     ellipse(this.pos.x, this.pos.y, this.size);
     pop();
+  }
+
+  gone() {
+    return this.pos.y < 0;
   }
 
   checkEdge() {

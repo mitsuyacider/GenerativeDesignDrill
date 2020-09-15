@@ -1,26 +1,22 @@
-export default class Particle001 {
-  constructor(pos, mass) {
+export default class Particle000 {
+  constructor() {
     this.topSpeed = random(3, 8);
     this.velocity = createVector(0, 0);
     this.acceleratation = p5.Vector.random2D();
-    this.acceleratation.mult(random(0));
-
-    this.pos = pos;
+    this.acceleratation.mult(random(2));
+    this.pos = createVector(width / 2, height / 2);
     this.fill;
     this.stroke;
-    this.size = random(50, 100);
+    this.size = random(5, 30);
     this.gradient;
-    this.mass = mass;
   }
 
   update() {
-    // this.acceleratation = p5.Vector.random2D();
-    // this.acceleratation.mult(random());
+    this.acceleratation = p5.Vector.random2D();
+    this.acceleratation.mult(random(2));
     this.velocity.add(this.acceleratation);
     this.velocity.limit(this.topSpeed);
     this.pos.add(this.velocity);
-
-    this.acceleratation.mult(0);
   }
 
   // https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
@@ -33,10 +29,6 @@ export default class Particle001 {
           b: parseInt(result[3], 16),
         }
       : null;
-  }
-
-  applyForce(force) {
-    this.acceleratation.add(force);
   }
 
   display() {
@@ -53,14 +45,8 @@ export default class Particle001 {
     const vec = p5.Vector.sub(this.pos, createVector(width / 2, height / 2));
     const len = vec.mag();
 
-    const xx = Math.floor(cos(90) * this.pos.x);
-    const gradient = drawingContext.createLinearGradient(
-      xx,
-      this.pos.y,
-      this.pos.x + this.size,
-      this.pos.y + this.size
-    );
-    drawingContext.fillStyle = gradient;
+    const gradient = drawingContext.createLinearGradient(0, 0, 0, 10);
+
     // Add three color stops
     const c = this.hexToRgb(this.fill);
     if (c) {
@@ -71,18 +57,18 @@ export default class Particle001 {
     }
 
     // Set the fill style and draw a rectangle
+    drawingContext.fillStyle = gradient;
     // translate(width / 2, height / 2);
-    // translate(width / 2, height / 2);
+    translate(width / 2, height / 2);
     const rad = atan2(this.pos.y - height / 2, this.pos.x - width / 2);
-    // rotate(rad);
+    rotate(rad);
     // stroke("green");
     strokeJoin(ROUND);
-    // rect(0, 0, len, 5);
+    rect(0, 0, len, 5);
     // line(width / 2, height / 2, this.pos.x, this.pos.y);
-    // drawingContext.shadowColor = color(255, 0, 0);
-    // drawingContext.shadowBlur = 25;
 
-    ellipse(this.pos.x, this.pos.y, this.size);
+    // ellipse(this.pos.x, this.pos.y, this.size);
+
     pop();
   }
 
