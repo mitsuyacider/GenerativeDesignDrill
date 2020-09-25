@@ -2,8 +2,10 @@
 // https://natureofcode.com/book/chapter-1-vectors/
 
 import ColorPallet from "./ColorPallet.js";
+import Grid011 from "./Grid011.js";
 
-import Oscillator from "./Oscillator.js";
+import Oscillator001 from "./Oscillator001.js";
+let gridPallet = [];
 
 let pallet;
 
@@ -11,6 +13,7 @@ let bg;
 
 let font;
 let fontSize = 180;
+const step = 100;
 
 let oscillator;
 
@@ -34,7 +37,16 @@ function setup() {
   textStyle(BOLD);
   textAlign(CENTER);
 
-  oscillator = new Oscillator();
+  for (let i = 0; i < width; i += step) {
+    for (let j = 0; j < height; j += step) {
+      // let grid = GridPallet.getRandom(i, j, step, step);
+      let grid = new Grid011(i, j, step, step);
+      gridPallet.push(grid);
+
+      grid.draw(random(pallet), random(pallet));
+    }
+  }
+  oscillator = new Oscillator001();
 }
 
 // https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
@@ -47,6 +59,13 @@ function hexToRgb(hex) {
         b: parseInt(result[3], 16),
       }
     : null;
+}
+
+function drawGrid() {
+  for (let i = 0; i < gridPallet.length; i++) {
+    const grid = gridPallet[i];
+    grid.draw();
+  }
 }
 
 function drawText() {
@@ -71,7 +90,8 @@ function draw() {
 
   drawText();
 
-  drawOscillator();
+  drawGrid();
+  // drawOscillator();
 }
 
 function drawOscillator() {
