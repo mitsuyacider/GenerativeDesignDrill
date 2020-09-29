@@ -1,29 +1,27 @@
 export default class Oscillator {
-  constructor(x = 0, y = 0, w = 100, h = 100) {
-    this.amplitude = 100;
-    this.angleVel = 0.02;
-    this.angle = 0;
-    this.startAngle = 0;
+  
+  // Because we are going to oscillate along the x and y axis we can use PVector for two angles, amplitudes, etc.!
+  
+  constructor(r) {
+    
+    // Initialize randomly
+    this.theta = 0;
+    this.amplitude = r;
+    
   }
 
-  display() {
-    push();
-    strokeWeight(1);
-    this.angle = this.startAngle;
-    let from = color(359, 100, 100, 15);
-    let to = color(0, 100, 100, 15);
+  // Update theta and offset
+  update(thetaVel) {
+    this.theta += thetaVel;
+  }
 
-    for (let x = 0; x < width; x += 4) {
-      const y = this.amplitude * sin(this.angle);
-      const alpha = map(x, 0, width, 0, 1);
-      let c = lerpColor(from, to, alpha);
-      let size = map(x, 0, width, 2, 200);
-      fill(c);
-      ellipse(x, y + height / 2, size, size);
-      this.angle += this.angleVel;
-    }
-    pop();
-
-    this.startAngle += 0.02;
+  // Display based on a position
+  display(pos) {
+    const x = map(cos(this.theta),-1,1,0,this.amplitude);
+    
+    stroke(0);
+    fill(50);
+    line(0,0,x,0);
+    ellipse(x,0,8,8);
   }
 }
