@@ -33,7 +33,7 @@ function setup() {
   pallet = pallet.filter((e, i) => i !== index);
 
   // background(bg.r, bg.g, bg.b);
-  background(0,0,0)
+  background(0, 0, 0);
   textFont(font, fontSize);
   textStyle(BOLD);
   textAlign(CENTER);
@@ -44,40 +44,10 @@ function setup() {
     w: width / 2,
     h: height / 8,
     step: 2,
-    amplitude:0
+    amplitude: 0,
   };
 
   oscillator = new Oscillator002(dataset);
-
-  let data = [0, 1, 2]
-
-  const data2 = [0,1,2]
-
-  console.log(data == data2)
-
-  const num = 1
-  const num2 = 1
-  console.log(num == '1')
-
-  var Employee ={
-    company: 'xyz'
-  }
-  var Emp1 = Object.create(Employee);
-  delete Emp1.company;
-  console.log(Emp1.company);
-
-  const du = Employee
-  delete du.company
-  console.log(du.company)
-
-  const a = '15'
-  const b = a + 5
-  console.log(b)
-
-}
-
-function dummy(arr) {
-  arr.push(0)
 }
 
 // https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
@@ -91,7 +61,6 @@ function hexToRgb(hex) {
       }
     : null;
 }
-
 
 function drawText() {
   strokeWeight(4);
@@ -119,13 +88,13 @@ function draw() {
 }
 
 function drawOscillator() {
-  const mouse = createVector(mouseX, mouseY)
-  const dir = p5.Vector.sub(mouse, oscillator.pos)
-  dir.normalize()
-  dir.mult(0.5)
+  const mouse = createVector(mouseX, mouseY);
+  const dir = p5.Vector.sub(mouse, oscillator.pos);
+  dir.normalize();
+  dir.mult(0.5);
   // oscillator.applyForce(dir)
   oscillator.update();
-  oscillator.checkEdge()
+  oscillator.checkEdge();
   oscillator.display();
 }
 
